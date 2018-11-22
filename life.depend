@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1542901331 source:d:\programmation_c_ete_2018\life\main.cpp
+	<iostream>
+	"game.hpp"
+
+1542900717 d:\programmation_c_ete_2018\life\game.hpp
+	"content.hpp"
+
+1542901567 d:\programmation_c_ete_2018\life\content.hpp
+	<vector>
+	<iostream>
+
