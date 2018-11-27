@@ -11,7 +11,7 @@ namespace gtools{
         line_tmp[1].color = sf::Color::Black;
         window.draw(line_tmp);
     };
-
+    
     void print_vline(sf::RenderWindow& window, unsigned int x1)
     {
         print_line(window, x1, 0, x1, window.getSize().y);
@@ -47,7 +47,7 @@ namespace gtools{
         if(!load_textures)
         { 
         
-        if (ann_doge.loadFromFile("doge.png"))
+        if (ann_doge.loadFromFile("ressources/doge.png"))
 {
     
     sprite.setTexture(ann_doge);
@@ -93,6 +93,36 @@ namespace gtools{
     };
 
     
+    void select_rectangle(sf::RenderWindow& w, unsigned int nb_cases_x, unsigned int nb_cases_y, unsigned int i,unsigned int j, unsigned int k, unsigned int l, unsigned int thickness = 10)
+    {
+        if(i>k)
+            select_rectangle(w, nb_cases_x, nb_cases_y, k, j, i, l);
+        else if(j>l)
+            select_rectangle(w, nb_cases_x, nb_cases_y, i, l, k, j);
+        else{
+        std::cout << i << j << k << l << std::endl;
+        int side_x = w.getSize().x / nb_cases_x;
+        int side_y = w.getSize().y / nb_cases_y;
+        sf::RectangleShape line1(sf::Vector2f((k-i+1)*side_x+thickness, thickness));
+        sf::RectangleShape line2(sf::Vector2f((k-i+1)*side_x+thickness, thickness));
+        sf::RectangleShape line3(sf::Vector2f((l-j+1)*side_x+thickness, thickness));
+        sf::RectangleShape line4(sf::Vector2f((l-j+1)*side_x+thickness, thickness));
+        line3.rotate(90);
+        line4.rotate(90);
+        line1.setPosition(side_x*i-thickness/2, side_y*j-thickness/2);
+        line2.setPosition(side_x*i-thickness/2, side_y*(l+1)-thickness/2);
+        line3.setPosition(side_x*i+thickness/2, side_y*j-thickness/2);
+        line4.setPosition(side_x*(k+1)+thickness/2, side_y*j-thickness/2);
+        line1.setFillColor(sf::Color::Red);
+        line2.setFillColor(sf::Color::Red);
+        line3.setFillColor(sf::Color::Red);
+        line4.setFillColor(sf::Color::Red);
 
+        w.draw(line1);
+        w.draw(line2);
+        w.draw(line3);
+        w.draw(line4);
+        }
+    }
 
 }

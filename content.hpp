@@ -2,13 +2,14 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 using std::vector;
-
+template<class T>
+using grid = vector<vector<T>>;
 
 typedef struct{
     unsigned int survival_min=2;
     unsigned int survival_max=3;
     unsigned int birth_min=3;
-    unsigned int birth_max=8;
+    unsigned int birth_max=3;
 }rules_container;
 
 class Cell{
@@ -47,6 +48,7 @@ public:
         dim_x_=v.size();
         dim_y_=v[0].size();
         };
+        
     vector<vector<bool>> get_board()
     {
                vector<bool> line;
@@ -65,6 +67,14 @@ public:
     void toogle(unsigned int x, unsigned int y)
     {
         cells_[x][y].toogle();
+    }
+    unsigned int get_size_x()
+    {
+        return dim_x_;
+    }
+    unsigned int get_size_y()
+    {
+        return dim_y_;
     }
     void init_board(){
         for(size_t i=0; i<dim_x_; i++){
@@ -90,6 +100,10 @@ public:
             }
         }
     }
+    bool get_cell_state(const size_t x, const size_t y)
+    {
+        return cells_[x][y].get_state();
+    }
     void apply_rules(const rules_container rules){
         for(size_t i=0; i<dim_x_; i++){
             for(size_t j=0; j<dim_y_; j++){
@@ -105,10 +119,21 @@ public:
     void set_cell(size_t i, size_t j, bool state){
         cells_[i][j].set_state(state);
     }
-
+    void stamp_board(Board b, const unsigned int x, const unsigned int y)
+    {
+        for(size_t i = 0; i<std::min(dim_x_-x, b.get_size_x()); i++)
+        {
+            for(size_t j = 0; j<std::min(dim_y_-y, b.get_size_y()); j++)
+            {
+                cells_[i+x][j+y].set_state(b.get_cell_state(i, j));
+            }
+        }
+        
+        //std::cout << cells_[2][2].get_state();
+    }
+    vector<vector<Cell>> get_cells()
+    {
+        return cells_;
+    }
+    
 };
-
-
-
-
-
