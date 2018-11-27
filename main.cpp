@@ -10,74 +10,59 @@ using namespace std;
 int main()
 {
     
-    config_container config;
-    sf::Clock clock;
-    sf::Time t1;
-    sf::Font font;
-    sf::Text text;
+    sf::Clock clock; //used for time
+    sf::Time t1; //main measure of time
+    const sf::Time delta_refresh = sf::milliseconds(100); //refresh delay for the main event handle
+    sf::Font font; //for name display
+    sf::Text text; // actual text
+    
     font.loadFromFile("ressources/arial.ttf");
     text.setFont(font);
     text.setCharacterSize(24);
     text.setFillColor(sf::Color::Red);
-    
-    const sf::Time delta_refresh = sf::milliseconds(100);
-    sf::RenderWindow window(sf::VideoMode(800, 800), "Life !");
-    window.setFramerateLimit(20);
     sf::Music music;
     music.setLoop(true);
+    sf::RenderWindow window(sf::VideoMode(800, 800), "Life !"); //main window
+    window.setFramerateLimit(20); //framerate
     
+    Game g; //our main Game
+    t1 = clock.getElapsedTime(); //ready the clock
+    bool resume = false; //pause flag
     
-    vector<vector<Cell>> table_test;
-    vector<Cell> line_test;
-    int frog[16] = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0};
+    grid<Cell> grid_buffer; //our ready to use memory
 
-    for(size_t i = 0; i<16; i++){
-        line_test.push_back(Cell(frog[i]));
-        if(i%4==3){
-            table_test.push_back(line_test);
-            line_test.clear();
-        }
-    }
-    rules_container r;
-    Board board_test(table_test);
-    Game g;//;(board_test, r, 4);
-    t1 = clock.getElapsedTime();
-    bool resume = false;
-    
-    grid<Cell> grid_buffer;
-
-    Board board_tmp;
-    int cursor = 0;
-    vector<std::string> premade_figures;
-    premade_figures = iogrid::get_names();
+    Board board_tmp; //out ready to use buffer
+    int cursor = 0; //cursor for the text 
+    vector<std::string> premade_figures; //names of all saves figures
+    premade_figures = iogrid::get_names(); //init
     size_t max_cursor = premade_figures.size();
-    text.setString(premade_figures[cursor]);
-    window.clear(sf::Color::White);
-    g.print_board(window);
+    text.setString(premade_figures[cursor]); //init the text
+    window.clear(sf::Color::White); //prepare clean window
+    g.print_board(window); //display initial setup
     window.draw(text);
     window.display();
-    int cursor_x = 0;
+    int cursor_x = 0; //used for save coordinates
     int cursor_y = 0;
-    bool flag_save = 0;
+    bool flag_save = 0; //used to handle the save loop
     while(window.isOpen())
     {
         
-        t1 = clock.getElapsedTime();
-        sf::Event event;
-        while (window.pollEvent(event))
+        t1 = clock.getElapsedTime(); //set time
+        sf::Event event; //get new event
+        while (window.pollEvent(event)) //refresh it
         {
             switch(event.type)
             {
-                case sf::Event::Closed:
+                case sf::Event::Closed: //close window
                     window.close();
                 break;
-                case sf::Event::KeyPressed:
+                case sf::Event::KeyPressed: //if key
                     switch(event.key.code)
                     {
-                        case sf::Keyboard::Space:
+                        case sf::Keyboard::Space: //space for pause
                             resume = !resume;
                         break;
-                        case sf::Keyboard::Left:
+                        case sf::Keyboard::Left: //LR to navigate
                             cursor--;
                             if(cursor < 0)
                                 cursor+=max_cursor;
@@ -89,25 +74,23 @@ int main()
                                 cursor=0;
                             text.setString(premade_figures[cursor]);
                         break;
-                        case sf::Keyboard::L:
+                        case sf::Keyboard::L: //Load the selected figure where the cursor is (top left corner)
                             grid_buffer = iogrid::load_board(cursor);
-                            board_tmp = Board(grid_buffer);
-
+                            board_tmp = Board(grid_buffer); //prepare the selected board
                             g.stamp_board(board_tmp,
                             sf::Mouse::getPosition(window).x * g.get_config().nb_cases_x /window.getSize().x, 
-                            sf::Mouse::getPosition(window).y * g.get_config().nb_cases_y /window.getSize().y);
-                            window.clear(sf::Color::White);
+                            sf::Mouse::getPosition(window).y * g.get_config().nb_cases_y /window.getSize().y); //replace the right area with the selected save
+                            window.clear(sf::Color::White); //main loop
                             g.print_board(window);
                             window.draw(text);
                             window.display();
-                            while(clock.getElapsedTime() < t1 + delta_refresh)
+                            while(clock.getElapsedTime() < t1 + delta_refresh) //wait
                             {
                                 ;
                             }   
                         break;
-                        case sf::Keyboard::D:
+                        case sf::Keyboard::D: //It smells like wet dog
                             g.doge_toogle();
-                            
                             if (!music.openFromFile("ressources/021dog.wav"))
                             return -1;
                             if(g.get_doge())
@@ -116,16 +99,15 @@ int main()
                             music.pause();
                         break;
 
-                        case sf::Keyboard::R:
+                        case sf::Keyboard::R: //reset
                             g = Game();
                             resume=false;
                             music.pause();
                         break;
-                        case sf::Keyboard::S:
-                            window.clear(sf::Color::White);
-                            cursor_x = sf::Mouse::getPosition(window).x * g.get_config().nb_cases_x /window.getSize().x;
+                        case sf::Keyboard::S: //enter save
+                            cursor_x = sf::Mouse::getPosition(window).x * g.get_config().nb_cases_x /window.getSize().x; //get initial position
                             cursor_y = sf::Mouse::getPosition(window).y * g.get_config().nb_cases_y /window.getSize().y;
-                            while(window.isOpen() && !flag_save)
+                            while(window.isOpen() && !flag_save) //subloop escape by all, validate with S
                             {
                                 window.clear(sf::Color::White);
                                 window.pollEvent(event);
@@ -160,7 +142,7 @@ int main()
                                             premade_figures = iogrid::get_names();
                                             max_cursor++;
                                             cursor = max_cursor;
-                                            text.setString(premade_figures[cursor]);
+                                            text.setString(premade_figures[cursor-1]);
                                         break;
                                         default:
                                             flag_save = true;

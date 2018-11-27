@@ -179,15 +179,19 @@ namespace iogrid{
             
             while(!save_file.eof())
             {   
-                
+                if(!save_file.eof())
                 save_file >> buffer_string;
+                if(!save_file.eof())
                 save_file >> concat;
+
                 buffer_string += " (" + concat;
+                if(!save_file.eof())
                 save_file >> concat;
                 buffer_string += "x" + concat +")";
+                if(!save_file.eof())
                 save_file >> concat;
                 buffer.push_back(buffer_string);
-                std::cout << buffer_string;
+                std::cout << buffer_string << std::endl;
                
             }
             if(buffer.size())
