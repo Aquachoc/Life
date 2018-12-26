@@ -1,3 +1,6 @@
+#ifndef PARAMETERS_HPP
+#define PARAMETERS_HPP
+
 #include <vector>
 #include <iostream>
 #include <fstream>
@@ -24,3 +27,4 @@ config_container::config_container(){
     else  
         std::cerr << "Config error" << std::endl;
 };
+#endif

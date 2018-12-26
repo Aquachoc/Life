@@ -1,46 +1,12 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
-        {
-            "label": "Compile",
-            "type": "shell",
-            "group": "build",
-            "command": "g++",
-            "args": [
-                "${file}",
-                "-o",
-                "${fileBasenameNoExtension}.exe",
-                "-IC:\\SFML-2.5.1\\include",
-                "-LC:\\SFML-2.5.1\\lib",
-                "-lsfml-graphics",
-                "-lsfml-window",
-                "-lsfml-system",
-                "-lsfml-audio"
-            ],
-            "problemMatcher": [
-                "$gcc"
-            ]
-        },
-        {
-            "label": "Run",
-            "type": "shell",
-            "command": "./main.exe",
-            "group": "build",
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "problemMatcher": []
-        }
-    ],
-    "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-        //"showReuseMessage": true
-    }
-}
- 
+      {
+        "label": "SFML",
+        "type": "shell",
+        "command": "g++",
+        "args": [ "${file}", "-o" , "sfml-app",  "-lsfml-graphics", "-lsfml-window", "-lsfml-system", "-lsfml-audio"],
+        "group":"build"
+      }
+    ]
+  }

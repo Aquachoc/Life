@@ -2,7 +2,6 @@
 #include <fstream>
 #include <time.h>
 #include <stdlib.h>
-#include <windows.h>
 #include <SFML/Audio.hpp>
 #include "game.hpp"
 using namespace std;
@@ -15,7 +14,7 @@ int main()
     const sf::Time delta_refresh = sf::milliseconds(100); //refresh delay for the main event handle
     sf::Font font; //for name display
     sf::Text text; // actual text
-    
+    auto wipe_color = sf::Color::White;
     font.loadFromFile("ressources/arial.ttf");
     text.setFont(font);
     text.setCharacterSize(24);
@@ -37,7 +36,7 @@ int main()
     premade_figures = iogrid::get_names(); //init
     size_t max_cursor = premade_figures.size();
     text.setString(premade_figures[cursor]); //init the text
-    window.clear(sf::Color::White); //prepare clean window
+    window.clear(wipe_color); //prepare clean window
     g.print_board(window); //display initial setup
     window.draw(text);
     window.display();
@@ -80,7 +79,7 @@ int main()
                             g.stamp_board(board_tmp,
                             sf::Mouse::getPosition(window).x * g.get_config().nb_cases_x /window.getSize().x, 
                             sf::Mouse::getPosition(window).y * g.get_config().nb_cases_y /window.getSize().y); //replace the right area with the selected save
-                            window.clear(sf::Color::White); //main loop
+                            window.clear(wipe_color); //main loop
                             g.print_board(window);
                             window.draw(text);
                             window.display();
@@ -91,6 +90,7 @@ int main()
                         break;
                         case sf::Keyboard::D: //It smells like wet dog
                             g.doge_toogle();
+                            wipe_color = g.get_doge() ? sf::Color::Black : sf::Color::White;
                             if (!music.openFromFile("ressources/021dog.wav"))
                             return -1;
                             if(g.get_doge())
@@ -102,6 +102,7 @@ int main()
                         case sf::Keyboard::R: //reset
                             g = Game();
                             resume=false;
+                            wipe_color = g.get_doge() ? sf::Color::Black : sf::Color::White;
                             music.pause();
                         break;
                         case sf::Keyboard::S: //enter save
@@ -109,8 +110,8 @@ int main()
                             cursor_y = sf::Mouse::getPosition(window).y * g.get_config().nb_cases_y /window.getSize().y;
                             while(window.isOpen() && !flag_save) //subloop escape by all, validate with S
                             {
-                                window.clear(sf::Color::White);
-                                window.pollEvent(event);
+                                window.clear(wipe_color);
+                                while(window.pollEvent(event) && event.type != sf::Event::KeyPressed && event.type != sf::Event::Closed);
                             
                             
                             gtools::select_rectangle(window, g.get_config().nb_cases_x, g.get_config().nb_cases_y,
@@ -161,7 +162,7 @@ int main()
                     {
                         g.toogle(event.mouseButton.x * g.get_config().nb_cases_x /window.getSize().x, 
                         event.mouseButton.y * g.get_config().nb_cases_y /window.getSize().y);
-                        window.clear(sf::Color::White);
+                        window.clear(wipe_color);
                         
                         g.print_board(window);
                         window.draw(text);
@@ -175,14 +176,14 @@ int main()
         if(resume)
         {
             g.next_step();
-            window.clear(sf::Color::White);
+            window.clear(wipe_color);
             g.print_board(window);
             window.draw(text);
             window.display();
         }
         else
         {
-            window.clear(sf::Color::White);
+            window.clear(wipe_color);
             g.print_board(window);
             window.draw(text);
             window.display();

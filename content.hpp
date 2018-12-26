@@ -1,3 +1,5 @@
+#ifndef CONTENT_HPP
+#define CONTENT_HPP
 #include <vector>
 #include <iostream>
 #include <SFML/Graphics.hpp>
@@ -137,3 +139,4 @@ public:
     }
     
 };
+#endif

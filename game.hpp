@@ -1,3 +1,6 @@
+#ifndef GAME_HPP
+#define GAME_HPP
+
 #include "content.hpp"
 #include "graphics.hpp"
 #include "parameters.hpp"
@@ -201,3 +204,5 @@ namespace iogrid{
         return buffer;
     }
 }
+
+#endif

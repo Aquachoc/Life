@@ -1,3 +1,5 @@
+#ifndef GRAPHICS_HPP
+#define GRAPHICS_HPP
 #include <SFML/Graphics.hpp>
 
 namespace gtools{
@@ -126,3 +128,4 @@ namespace gtools{
     }
 
 }
+#endif
