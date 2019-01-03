@@ -27,7 +27,7 @@ int main()
     Game g; //our main Game
     t1 = clock.getElapsedTime(); //ready the clock
     bool resume = false; //pause flag
-    
+    bool step = false;
     grid<Cell> grid_buffer; //our ready to use memory
 
     Board board_tmp; //out ready to use buffer
@@ -58,6 +58,9 @@ int main()
                 case sf::Event::KeyPressed: //if key
                     switch(event.key.code)
                     {
+                        case sf::Keyboard::N:
+                        step = true;
+                        break;
                         case sf::Keyboard::Space: //space for pause
                             resume = !resume;
                         break;
@@ -173,13 +176,14 @@ int main()
             
         }
 
-        if(resume)
+        if(resume || step)
         {
             g.next_step();
             window.clear(wipe_color);
             g.print_board(window);
             window.draw(text);
             window.display();
+            step = false;
         }
         else
         {
