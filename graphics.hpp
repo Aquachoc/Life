@@ -48,7 +48,7 @@ namespace gtools{
 
     // state = 1 for active square, =0 for dead square; doge is the doge indicator
     void set_square(sf::RenderWindow& window, unsigned int nb_cases_x, 
-    unsigned int nb_cases_y, unsigned int coord_x, unsigned int coord_y, bool state, bool doge = false)
+            unsigned int nb_cases_y, unsigned int coord_x, unsigned int coord_y, bool state, bool doge = false)
     {
         static bool load_textures = false;
         static sf::Texture ann_doge;
@@ -99,8 +99,7 @@ namespace gtools{
     sprite.setScale(sf::Vector2f(static_cast<float>(side_x)/265, static_cast<float>(side_y)/256));
     window.draw(sprite);
         }
-
-        
+  
     };
 
     // draws a red rectangle around the area between the couple (i,j) and (k,l)

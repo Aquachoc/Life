@@ -118,46 +118,46 @@ int main()
                             
                             
                             // highlights the current save selection
-                            gtools::select_rectangle(window, g.get_config().nb_cases_x, g.get_config().nb_cases_y,
-                             cursor_x, cursor_y, sf::Mouse::getPosition(window).x * g.get_config().nb_cases_x /window.getSize().x,
-                             sf::Mouse::getPosition(window).y * g.get_config().nb_cases_y /window.getSize().y);
-                            g.print_board(window);
-                            window.draw(text);
-                            window.display();
-                            // waits before refresh
-                            while(clock.getElapsedTime() < t1 + delta_refresh);
-                            t1 = clock.getElapsedTime();
-                            // checks the events
-                            switch(event.type)
-                            {
-                                case sf::Event::Closed:
-                                    window.close();
-                                break;
-                                // if the window is still open
-                                case sf::Event::KeyPressed: 
-                                    switch(event.key.code)
-                                    {
-                                        // validate save
-                                        case sf::Keyboard::S:
-                                            flag_save = true;
-                                            grid_buffer = g.extract(cursor_x, cursor_y, sf::Mouse::getPosition(window).x * g.get_config().nb_cases_x /window.getSize().x,
-                             sf::Mouse::getPosition(window).y * g.get_config().nb_cases_y /window.getSize().y);
-                                            board_tmp = Board(grid_buffer);
-
-                                            iogrid::save_board(board_tmp, "Custom" + std::to_string(max_cursor));
-                                            premade_figures = iogrid::get_names();
-                                            max_cursor++;
-                                            cursor = max_cursor;
-                                            text.setString(premade_figures[cursor-1]);
-                                        break;
-                                        default:
-                                            // continues save mode next loop
-                                            flag_save = true;
-                                        break;
-                                    }
+                                gtools::select_rectangle(window, g.get_config().nb_cases_x, g.get_config().nb_cases_y,
+                                cursor_x, cursor_y, sf::Mouse::getPosition(window).x * g.get_config().nb_cases_x /window.getSize().x,
+                                sf::Mouse::getPosition(window).y * g.get_config().nb_cases_y /window.getSize().y);
+                                g.print_board(window);
+                                window.draw(text);
+                                window.display();
+                                // waits before refresh
+                                while(clock.getElapsedTime() < t1 + delta_refresh);
+                                t1 = clock.getElapsedTime();
+                                // checks the events
+                                switch(event.type)
+                                {
+                                    case sf::Event::Closed:
+                                        window.close();
                                     break;
-                                
-                            }
+                                    // if the window is still open
+                                    case sf::Event::KeyPressed: 
+                                        switch(event.key.code)
+                                        {
+                                            // validate save
+                                            case sf::Keyboard::S:
+                                                flag_save = true;
+                                                grid_buffer = g.extract(cursor_x, cursor_y, sf::Mouse::getPosition(window).x * g.get_config().nb_cases_x /window.getSize().x,
+                                                        sf::Mouse::getPosition(window).y * g.get_config().nb_cases_y /window.getSize().y);
+                                                board_tmp = Board(grid_buffer);
+
+                                                iogrid::save_board(board_tmp, "Custom" + std::to_string(max_cursor));
+                                                premade_figures = iogrid::get_names();
+                                                max_cursor++;
+                                                cursor = max_cursor;
+                                                text.setString(premade_figures[cursor-1]);
+                                            break;
+                                            default:
+                                                // continues save mode next loop
+                                                flag_save = true;
+                                            break;
+                                        }
+                                    break;
+                                    
+                                }
                             }
                             flag_save = false;
                         break;

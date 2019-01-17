@@ -21,11 +21,11 @@ config_container::config_container(){
     if(file){
         // we remove everything before the = char
         while(file.get()!='=');
-                file >> arg;
-                nb_cases_x = atoi(arg.c_str());
+        file >> arg;
+        nb_cases_x = atoi(arg.c_str());
         while(file.get()!='=');
-                file >> arg;
-                nb_cases_y = atoi(arg.c_str());
+        file >> arg;
+        nb_cases_y = atoi(arg.c_str());
         file.close();
     }
     else  

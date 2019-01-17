@@ -62,14 +62,12 @@ public:
     // getter for the board as a boolean matrix    
     vector<vector<bool>> get_board()
     {
-               vector<bool> line;
+        vector<bool> line;
         vector<vector<bool>> arr;
         for(size_t i=0; i<dim_x_; i++)
         {
             for(size_t j=0; j<dim_y_; j++)
-            {
-                line.push_back(cells_[i][j].get_state());
-            }
+                line.push_back(cells_[i][j].get_state());            
             arr.push_back(line);
             line.clear();
         }

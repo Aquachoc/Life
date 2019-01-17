@@ -21,24 +21,24 @@ class Game{
         bool doge_ = config_.doge;
     public:
     // creates an empty board with default config
-    Game()
-        {
-            vector<vector<Cell>> tmp_board;
-            vector<Cell> tmp_line;
-            for(unsigned int i = 0; i < config_.nb_cases_x; i++)
+        Game()
             {
-                for(unsigned int j = 0; j < config_.nb_cases_y; j++)
+                vector<vector<Cell>> tmp_board;
+                vector<Cell> tmp_line;
+                for(unsigned int i = 0; i < config_.nb_cases_x; i++)
                 {
-                    tmp_line.push_back(Cell(false));
+                    for(unsigned int j = 0; j < config_.nb_cases_y; j++)
+                    {
+                        tmp_line.push_back(Cell(false));
+                    }
+                    tmp_board.push_back(tmp_line);
+                    tmp_line.clear();
                 }
-                tmp_board.push_back(tmp_line);
-                tmp_line.clear();
-            }
-            main_board_ = Board(tmp_board);
-        };
+                main_board_ = Board(tmp_board);
+            };
 
         // copies an existing board and set of rules
-        Game(Board& b, rules_container& r=rules_container(), int nmax=0){
+        Game(Board& b, rules_container& r, int nmax=0){
             vector<vector<Cell>> tmp_board;
             vector<Cell> tmp_line;
             main_board_ = b;
@@ -54,8 +54,8 @@ class Game{
         // updates the board information about neighbourhood then applies rules
         // corresponds to a full round of evolution
         void next_step(){
-        main_board_.init_board();
-        main_board_.apply_rules(rules_);
+            main_board_.init_board();
+            main_board_.apply_rules(rules_);
         };
 
         // displays boardnon main_frame
@@ -125,16 +125,14 @@ namespace iogrid{
         std::fstream save_file ("ressources/save.txt", std::ios::in | std::ios::app);
         if(save_file.is_open())
         {
-
             // stores the board dimensions
             save_file << name << " " << b.get_size_x() << " " << b.get_size_y() << " ";
             // converts alive (resp dead) to '1' (resp '0') 
-            for(size_t i=0; i < b.get_size_x(); ++i){
+            for(size_t i=0; i < b.get_size_x(); ++i)
                 for(size_t j=0; j < b.get_size_y(); ++j)
                     save_file << (b.get_cell_state(i, j) ? '1' : '0');
                     //save_file << " ";
-                    }
-
+                
             save_file << std::endl;
             save_file.close();
         }
@@ -166,7 +164,6 @@ namespace iogrid{
                     {
                         char c = buffer[y*i+j];
                         line_tmp.push_back(c=='1' ? Cell(true) : Cell(false));
-                        std::cout << c;
                     }
                 cells.push_back(line_tmp);
                 line_tmp.clear();
