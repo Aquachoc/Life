@@ -102,40 +102,42 @@ int main()
                             music.pause();
                         break;
 
-                        case sf::Keyboard::R: //reset
+                        case sf::Keyboard::R: //resets the board
                             g = Game();
                             resume=false;
                             wipe_color = g.get_doge() ? sf::Color::Black : sf::Color::White;
                             music.pause();
                         break;
-                        case sf::Keyboard::S: //enter save
+                        case sf::Keyboard::S: //enter figure save mode
                             cursor_x = sf::Mouse::getPosition(window).x * g.get_config().nb_cases_x /window.getSize().x; //get initial position
                             cursor_y = sf::Mouse::getPosition(window).y * g.get_config().nb_cases_y /window.getSize().y;
-                            while(window.isOpen() && !flag_save) //subloop escape by all, validate with S
+                            while(window.isOpen() && !flag_save) //subloop escape by all keys, validate with S key, waiting for validation
                             {
                                 window.clear(wipe_color);
                                 while(window.pollEvent(event) && event.type != sf::Event::KeyPressed && event.type != sf::Event::Closed);
                             
                             
+                            // highlights the current save selection
                             gtools::select_rectangle(window, g.get_config().nb_cases_x, g.get_config().nb_cases_y,
                              cursor_x, cursor_y, sf::Mouse::getPosition(window).x * g.get_config().nb_cases_x /window.getSize().x,
                              sf::Mouse::getPosition(window).y * g.get_config().nb_cases_y /window.getSize().y);
                             g.print_board(window);
                             window.draw(text);
                             window.display();
-                            while(clock.getElapsedTime() < t1 + delta_refresh)
-                            {
-                                ;
-                            }
+                            // waits before refresh
+                            while(clock.getElapsedTime() < t1 + delta_refresh);
                             t1 = clock.getElapsedTime();
+                            // checks the events
                             switch(event.type)
                             {
                                 case sf::Event::Closed:
                                     window.close();
                                 break;
+                                // if the window is still open
                                 case sf::Event::KeyPressed: 
                                     switch(event.key.code)
                                     {
+                                        // validate save
                                         case sf::Keyboard::S:
                                             flag_save = true;
                                             grid_buffer = g.extract(cursor_x, cursor_y, sf::Mouse::getPosition(window).x * g.get_config().nb_cases_x /window.getSize().x,
@@ -149,6 +151,7 @@ int main()
                                             text.setString(premade_figures[cursor-1]);
                                         break;
                                         default:
+                                            // continues save mode next loop
                                             flag_save = true;
                                         break;
                                     }
@@ -160,6 +163,7 @@ int main()
                         break;
                     }
                 break;
+                // toogles the selected cell in pause mode
                 case sf::Event::MouseButtonPressed:
                     if(!resume)
                     {
@@ -176,6 +180,7 @@ int main()
             
         }
 
+        // if no pause or next step asked, progress one turn
         if(resume || step)
         {
             g.next_step();
@@ -192,16 +197,8 @@ int main()
             window.draw(text);
             window.display();
         }
-        while(clock.getElapsedTime() < t1 + delta_refresh)
-        {
-            ;
-        }
-    
-
-       // Sleep(100);*
+        while(clock.getElapsedTime() < t1 + delta_refresh);
     }
    
-    
-    //iogrid::save_board(board_test, "lol");
     return 0;
 }

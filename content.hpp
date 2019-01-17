@@ -5,8 +5,10 @@
 #include <SFML/Graphics.hpp>
 using std::vector;
 template<class T>
+// Grid is a mutable matrix
 using grid = vector<vector<T>>;
 
+// Container for the evolution rules of the game
 typedef struct{
     unsigned int survival_min=2;
     unsigned int survival_max=3;
@@ -14,6 +16,8 @@ typedef struct{
     unsigned int birth_max=3;
 }rules_container;
 
+// Defines a class cell which state can be dead (=0) or alive (=1)
+// Also contains information on its neighbours evolution purposes
 class Cell{
 private:
     bool state_;
@@ -24,6 +28,7 @@ public:
         state_=s;
     };
     Cell(const Cell&) = default;
+    // getters and setters for cell properties
     void reset_neigh(){nb_neigh_alive_=0;};
     void incr_neigh(){nb_neigh_alive_++;};
     void decr_neigh(){nb_neigh_alive_--;};
@@ -37,6 +42,8 @@ public:
 
 };
 
+// Board is a mutable matrix of Cells 
+// Contains the evolution functions for the cells state 
 class Board{
 private:
     unsigned int nb_turn_;
@@ -44,13 +51,15 @@ private:
     unsigned int dim_y_;
     vector<vector<Cell>> cells_;
 public:
+    // Board can be initialized from a simple matrix
     Board(){};
     Board(vector<vector<Cell>>& v){
         cells_=v;
         dim_x_=v.size();
         dim_y_=v[0].size();
         };
-        
+    
+    // getter for the board as a boolean matrix    
     vector<vector<bool>> get_board()
     {
                vector<bool> line;
@@ -66,6 +75,7 @@ public:
         }
         return arr;
     }
+    // toogles the state of cell (x,y)
     void toogle(unsigned int x, unsigned int y)
     {
         cells_[x][y].toogle();
@@ -78,6 +88,7 @@ public:
     {
         return dim_y_;
     }
+    // sets the right information for each cell about its neighbourhood by counting the alive neighbours
     void init_board(){
         for(size_t i=0; i<dim_x_; i++){
             for(size_t j=0; j<dim_y_; j++){
@@ -106,6 +117,7 @@ public:
     {
         return cells_[x][y].get_state();
     }
+    // updates the cells state in accordance to the rules container
     void apply_rules(const rules_container rules){
         for(size_t i=0; i<dim_x_; i++){
             for(size_t j=0; j<dim_y_; j++){
@@ -121,6 +133,7 @@ public:
     void set_cell(size_t i, size_t j, bool state){
         cells_[i][j].set_state(state);
     }
+    // pastes the board b on this board starting at coordinates (x,y)
     void stamp_board(Board b, const unsigned int x, const unsigned int y)
     {
         for(size_t i = 0; i<std::min(dim_x_-x, b.get_size_x()); i++)
@@ -130,8 +143,6 @@ public:
                 cells_[i+x][j+y].set_state(b.get_cell_state(i, j));
             }
         }
-        
-        //std::cout << cells_[2][2].get_state();
     }
     vector<vector<Cell>> get_cells()
     {
