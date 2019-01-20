@@ -1,2 +1,4 @@
 size_x = 16
 size_y = 16
+res_x = 1000
+res_y = 1000

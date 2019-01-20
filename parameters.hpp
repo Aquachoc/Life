@@ -12,6 +12,8 @@ using std::vector;
 struct config_container{
     unsigned int nb_cases_x = 20;
     unsigned int nb_cases_y = 20;
+    unsigned int res_x = 800;
+    unsigned int res_y = 800;
     bool doge = false;
     config_container();
 };
@@ -26,6 +28,13 @@ config_container::config_container(){
         while(file.get()!='=');
         file >> arg;
         nb_cases_y = atoi(arg.c_str());
+        while(file.get()!='=');
+        file >> arg;
+        res_x = atoi(arg.c_str());
+        while(file.get()!='=');
+        file >> arg;
+        res_y = atoi(arg.c_str());
+        
         file.close();
     }
     else  

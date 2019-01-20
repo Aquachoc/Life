@@ -137,7 +137,7 @@ namespace iogrid{
             save_file.close();
         }
         else
-        std::cout << "error";
+            std::cout << "error";
     }
     // loads the cursor-th line as a matrix from the save.txt file
     vector<vector<Cell>> load_board(unsigned int cursor=0)

@@ -21,7 +21,8 @@ int main()
     text.setFillColor(sf::Color::Red);
     sf::Music music;
     music.setLoop(true);
-    sf::RenderWindow window(sf::VideoMode(800, 800), "Life !"); //main window
+    config_container conf;
+    sf::RenderWindow window(sf::VideoMode(conf.res_x, conf.res_y), "Life !"); //main window
     window.setFramerateLimit(20); //framerate
     
     Game g; //our main Game
